@@ -1,11 +1,9 @@
-// PROGRAMM: LED Würfel
- 
- 
+#include "MyDiceLibrary.h"
+
 // Pin des Tasters
 int button = 2;
 
-
-//LED for dice
+// LED for dice
 int bottomLeft = 8;
 int middleLeft = 7;
 int upperLeft = 6;
@@ -14,11 +12,13 @@ int bottomRight = 4;
 int middleRight = 3;
 int upperRight = 12;
 
-
 int state = 0;
 long randNumber;
 
-//Initial Setup
+volatile bool buttonPressed = false;  // Flag für Tastendruck
+
+bool initialAnimationDone = false;
+
 void setup() {
   pinMode(bottomLeft, OUTPUT);
   pinMode(middleLeft, OUTPUT);
@@ -28,164 +28,53 @@ void setup() {
   pinMode(middleRight, OUTPUT);
   pinMode(upperRight, OUTPUT);
 
-  //Button
-  pinMode(button,INPUT_PULLUP);
+  // Button
+  pinMode(button, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(button), buttonInterrupt, FALLING);  // Interrupt bei fallender Flanke
+
   Serial.begin(9600);
   randomSeed(analogRead(0));
 }
 
-bool initialAnimationDone = false;
-
 void loop() {
-  // Überprüfen, ob die Initialanimation bereits durchgeführt wurde
   if (!initialAnimationDone) {
-    // Führe die Initialanimation aus
-    simpleAnimation();
-    initialAnimationDone = true;  // Setze die Variable auf true, um zu markieren, dass die Animation durchgeführt wurde
+    MyDiceLibrary::simpleAnimation();
+    initialAnimationDone = true;
   }
 
-  // Überprüfen, ob der Button gedrückt wurde
   if (digitalRead(button) == LOW && state == 0) {
     state = 1;
     randNumber = random(1, 7);
-    delay(1000);
+    MyDiceLibrary::delayMillis(1000);
     Serial.println(randNumber);
-    
-    // Stopp der Animation
-    clear();
-    
-    // Zeige die entsprechende Zahl an
+
+    MyDiceLibrary::clear();
+
     if (randNumber == 6) {
-      six();
+      MyDiceLibrary::six();
     } else if (randNumber == 5) {
-      five();
+      MyDiceLibrary::five();
     } else if (randNumber == 4) {
-      four();
+      MyDiceLibrary::four();
     } else if (randNumber == 3) {
-      three();
+      MyDiceLibrary::three();
     } else if (randNumber == 2) {
-      two();
+      MyDiceLibrary::two();
     } else if (randNumber == 1) {
-      one();
+      MyDiceLibrary::one();
     }
-    
-    delay(1000);
-    clear();
+
+    MyDiceLibrary::delayMillis(1000);
+    MyDiceLibrary::clear();
     state = 0;
+  } else if (!buttonPressed) {
+    MyDiceLibrary::enterSleepMode();
+    MyDiceLibrary::delayMillis(100);
+  } else {
+    buttonPressed = false;
   }
 }
 
-
-void one()
-{
-  digitalWrite(middle, HIGH);
+void buttonInterrupt() {
+  buttonPressed = true;
 }
-
-void two()
-{
-  digitalWrite(bottomLeft, HIGH);
-  digitalWrite(upperRight, HIGH);
-}
-
-void three()
-{
-  digitalWrite(bottomLeft, HIGH);
-  digitalWrite(middle, HIGH);
-  digitalWrite(upperRight, HIGH);
-}
-
-void four()
-{
-  digitalWrite(bottomLeft, HIGH);
-  digitalWrite(upperLeft, HIGH); 
-  digitalWrite(bottomRight, HIGH);
-  digitalWrite(upperRight, HIGH);
-}
-
-void five()
-{
-  digitalWrite(bottomLeft, HIGH);
-  digitalWrite(upperLeft, HIGH);
-  digitalWrite(middle, HIGH);
-  digitalWrite(bottomRight, HIGH);
-  digitalWrite(upperRight, HIGH);
-}
-
-void six()
-{
-  digitalWrite(bottomLeft, HIGH);
-  digitalWrite(middleLeft, HIGH);
-  digitalWrite(upperLeft, HIGH);
-  digitalWrite(bottomRight, HIGH);
-  digitalWrite(middleRight, HIGH);
-  digitalWrite(upperRight, HIGH);
-}
-
-
-void clear()
-{
-  digitalWrite(bottomLeft, LOW);
-  digitalWrite(middleLeft, LOW);
-  digitalWrite(upperLeft, LOW);
-  digitalWrite(middle, LOW);
-  digitalWrite(bottomRight, LOW);
-  digitalWrite(middleRight, LOW);
-  digitalWrite(upperRight, LOW);
-}
-
-// Funktion für eine einfache Animation
-void simpleAnimation() {
-  digitalWrite(bottomLeft, HIGH);
-  delay(200);
-  digitalWrite(bottomLeft, LOW);
-
-  digitalWrite(middleLeft, HIGH);
-  delay(200);
-  digitalWrite(middleLeft, LOW);
-
-  digitalWrite(upperLeft, HIGH);
-  delay(200);
-  digitalWrite(upperLeft, LOW);
-
-  digitalWrite(middle, HIGH);
-  delay(200);
-  digitalWrite(middle, LOW);
-
-  digitalWrite(bottomRight, HIGH);
-  delay(200);
-  digitalWrite(bottomRight, LOW);
-
-  digitalWrite(middleRight, HIGH);
-  delay(200);
-  digitalWrite(middleRight, LOW);
-
-  digitalWrite(upperRight, HIGH);
-  delay(200);
-  digitalWrite(upperRight, LOW);
-
-  digitalWrite(middleRight, HIGH);
-  delay(200);
-  digitalWrite(middleRight, LOW);
-
-  digitalWrite(bottomRight, HIGH);
-  delay(200);
-  digitalWrite(bottomRight, LOW);
-
-  digitalWrite(middle, HIGH);
-  delay(200);
-  digitalWrite(middle, LOW);
-
-  digitalWrite(upperLeft, HIGH);
-  delay(200);
-  digitalWrite(upperLeft, LOW);
-
-  digitalWrite(middleLeft, HIGH);
-  delay(200);
-  digitalWrite(middleLeft, LOW);
-
-  digitalWrite(bottomLeft, HIGH);
-  delay(200);
-  digitalWrite(bottomLeft, LOW);
-  delay(200);
-}
-
