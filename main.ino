@@ -30,7 +30,7 @@ void setup() {
 
   // Button
   pinMode(button, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(button), buttonInterrupt, FALLING);  // Interrupt bei fallender Flanke
+  
 
   Serial.begin(9600);
   randomSeed(analogRead(0));
@@ -76,6 +76,3 @@ void loop() {
   }
 }
 
-void buttonInterrupt() {
-  buttonPressed = true;
-}
