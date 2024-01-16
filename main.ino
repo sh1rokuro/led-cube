@@ -34,6 +34,8 @@ void setup() {
 
   Serial.begin(9600);
   randomSeed(analogRead(0));
+
+  MyDiceLibrary::setupWatchdog(8);
 }
 
 void loop() {
