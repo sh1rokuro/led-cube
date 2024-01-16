@@ -18,7 +18,7 @@ public:
   static void enterSleepMode();
   static void setupWatchdog(int time);
 
-  static void buttonInterrupt();
+
   static void clear();
   static void one();
   static void two();
