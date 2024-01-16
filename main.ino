@@ -45,9 +45,11 @@ void loop() {
   if (digitalRead(button) == LOW && state == 0) {
     state = 1;
     randNumber = random(1, 7);
-    MyDiceLibrary::delayMillis(1000);
+    delay(1000);
     Serial.println(randNumber);
 
+    MyDiceLibrary::clear();
+    MyDiceLibrary::RollingDiceAnimation();
     MyDiceLibrary::clear();
 
     if (randNumber == 6) {
@@ -64,12 +66,11 @@ void loop() {
       MyDiceLibrary::one();
     }
 
-    MyDiceLibrary::delayMillis(1000);
+    delay(1000);
     MyDiceLibrary::clear();
     state = 0;
   } else if (!buttonPressed) {
     MyDiceLibrary::enterSleepMode();
-    MyDiceLibrary::delayMillis(100);
   } else {
     buttonPressed = false;
   }
