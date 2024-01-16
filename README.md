@@ -15,5 +15,6 @@ This project implements a dice using LEDs that displays random numbers from 1 to
 ## Documentation
 
 User Documentation: https://github.com/sh1rokuro/led-cube/files/13946471/Benutzerdokumentation.LED.Wurfel.pdf
+
 Developer Documentation:
 
