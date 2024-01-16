@@ -33,8 +33,23 @@ void MyDiceLibrary::setupWatchdog(int time) {
   sei();  // Interrupts aktivieren
 }
 
-byte MyDiceLibrary::getWDTControl() {
-  return (1 << WDIE) | (1 << WDP3) | (1 << WDP0);  // Interrupt-Modus und 8 Sekunden Timer
+byte MyDiceLibrary::getWDTControl(int time) {
+  byte wdtControl;
+
+  if (time <= 16) {
+    wdtControl = (1 << WDIE) | (1 << WDP3) | (1 << WDP0);  // Interrupt-Modus und 16 Sekunden Timer
+  } else if (time <= 32) {
+    wdtControl = (1 << WDIE) | (1 << WDP3) | (1 << WDP1);  // Interrupt-Modus und 32 Sekunden Timer
+  } else if (time <= 64) {
+    wdtControl = (1 << WDIE) | (1 << WDP3) | (1 << WDP2);  // Interrupt-Modus und 64 Sekunden Timer
+  } else if (time <= 128) {
+    wdtControl = (1 << WDIE) | (1 << WDP3) | (1 << WDP2) | (1 << WDP0);  // Interrupt-Modus und 128 Sekunden Timer
+  } else {
+    wdtControl = (1 << WDIE) | (1 << WDP3) | (1 << WDP0);  // Interrupt-Modus und 8 Sekunden Timer
+  }
+
+  return wdtControl;
+}
 
 
 void MyDiceLibrary::clear() {
