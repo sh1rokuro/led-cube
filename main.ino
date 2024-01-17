@@ -17,7 +17,10 @@ long randNumber;
 
 volatile bool buttonPressed = false;  // Flag für Tastendruck
 
+
 bool initialAnimationDone = false;
+
+unsigned long buttonTimer = 0;
 
 void setup() {
   pinMode(bottomLeft, OUTPUT);
@@ -30,22 +33,19 @@ void setup() {
 
   // Button
   pinMode(button, INPUT_PULLUP);
-  
+  attachInterrupt(digitalPinToInterrupt(button),buttonInterrupt, FALLING);  // Interrupt bei fallender Flanke
 
   Serial.begin(9600);
   randomSeed(analogRead(0));
-
-  MyDiceLibrary::setupWatchdog(8);
+  
+  MyDiceLibrary::simpleAnimation();
+  
 }
 
 void loop() {
-  if (!initialAnimationDone) {
-    MyDiceLibrary::simpleAnimation();
-    initialAnimationDone = true;
-  }
-
-  if (digitalRead(button) == LOW && state == 0) {
-    state = 1;
+  //MyDiceLibrary::setupWatchdog(8);
+  if (digitalRead(button) == LOW) {
+    //state = 1;
     randNumber = random(1, 7);
     delay(1000);
     Serial.println(randNumber);
@@ -69,12 +69,21 @@ void loop() {
     }
 
     delay(1000);
+    Serial.println("HHHHHHHHHHHHHHHHH");
+    delay(1000);
     MyDiceLibrary::clear();
-    state = 0;
+    //state = 0;
+    buttonPressed = true;
   } else if (!buttonPressed) {
+    delay(1000);
     MyDiceLibrary::enterSleepMode();
+    delay(100);
   } else {
     buttonPressed = false;
   }
+}
+
+void buttonInterrupt() {
+  buttonPressed = true;
 }
 
