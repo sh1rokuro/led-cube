@@ -69,7 +69,6 @@ void loop() {
     }
 
     delay(1000);
-    Serial.println("HHHHHHHHHHHHHHHHH");
     delay(1000);
     MyDiceLibrary::clear();
     //state = 0;
