@@ -13,11 +13,9 @@ public:
   static int middleRight;
   static int upperRight;
 
-  static bool initialAnimationDone;
 
   static void enterSleepMode();
   static void setupWatchdog(int time);
-
 
   static void clear();
   static void one();
@@ -28,7 +26,7 @@ public:
   static void six();
   static void simpleAnimation();
   static void RollingDiceAnimation();
-  
+
 private:
   static byte getWDTControl(int time);
 };

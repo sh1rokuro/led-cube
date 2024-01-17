@@ -13,8 +13,6 @@ int MyDiceLibrary::bottomRight = 4;
 int MyDiceLibrary::middleRight = 3;
 int MyDiceLibrary::upperRight = 12;
 
-bool MyDiceLibrary::initialAnimationDone = false;
-
 
 void MyDiceLibrary::enterSleepMode() {
   Serial.println("Entering Sleep Mode");
@@ -45,12 +43,12 @@ byte MyDiceLibrary::getWDTControl(int time) {
   } else if (time <= 128) {
     wdtControl = (1 << WDIE) | (1 << WDP3) | (1 << WDP2) | (1 << WDP0);  // Interrupt-Modus und 128 Sekunden Timer
   } else {
+    // Standard ist 8 Sekunden
     wdtControl = (1 << WDIE) | (1 << WDP3) | (1 << WDP0);  // Interrupt-Modus und 8 Sekunden Timer
   }
 
   return wdtControl;
 }
-
 
 void MyDiceLibrary::clear() {
   digitalWrite(bottomLeft, LOW);
